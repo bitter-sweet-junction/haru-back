@@ -1,5 +1,6 @@
 fastapi
-uvicorn[standard]
 pyjwt
 pymongo
+python-multipart
 requests
+uvicorn[standard]
