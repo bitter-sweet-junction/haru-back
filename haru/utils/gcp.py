@@ -1,6 +1,7 @@
-from google.cloud import storage
+from google.cloud import pubsub_v1, storage
 
 _gcs_client: storage.Client = None
+_pubsub_client: pubsub_v1.PublisherClient = None
 
 
 def upload_to_gcs(bucket: str, name: str, content: bytes, *, prefix: str = "") -> str:
@@ -11,6 +12,13 @@ def upload_to_gcs(bucket: str, name: str, content: bytes, *, prefix: str = "") -
     return blob.public_url
 
 
+def publish_pubsub(topic: str, content: str):
+    topic_path = _pubsub_client.topic_path("", topic)
+    result = _pubsub_client.publish(topic_path, content.encode("utf-8"))
+    return result.result()
+
+
 def init_gcp_clients():
-    global _gcs_client
+    global _gcs_client, _pubsub_client
     _gcs_client = storage.Client()
+    _pubsub_client = pubsub_v1.PublisherClient()

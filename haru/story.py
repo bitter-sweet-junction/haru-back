@@ -1,3 +1,4 @@
+import json
 import time
 import uuid
 
@@ -7,9 +8,11 @@ from pymongo import ASCENDING
 from haru.model import Story, User
 from haru.utils.auth import get_current_user
 from haru.utils.db import get_database
-from haru.utils.gcp import upload_to_gcs
+from haru.utils.gcp import publish_pubsub, upload_to_gcs
 
 story_router = APIRouter()
+
+REQUEST_GENERATE_IMAGE_PUBSUB_TOPIC = "haru-back-generate-image"
 
 
 def _story_to_dto(story: Story) -> dict:
@@ -57,6 +60,8 @@ def post_stories(
     result = get_database().story.insert_one(story)
     if result is None or result.inserted_id != story["_id"]:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="story insertion failed")
+
+    publish_pubsub(REQUEST_GENERATE_IMAGE_PUBSUB_TOPIC, json.dumps(story))
 
     return {"story": _story_to_dto(story)}
 
