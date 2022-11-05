@@ -31,6 +31,7 @@ def post_stories(
     date: str = Form(),
     title: str = Form(),
     description: str | None = Form(default=None),
+    weather: str | None = Form(default=None),
     feeling: str | None = Form(default=None),
     picture: UploadFile | None = File(default=None),
 ):
@@ -46,11 +47,12 @@ def post_stories(
         "user_id": user["_id"],
         "date": date,
         "createTime": time.time(),
-        "imageUrl": None,
-        "pictureUrl": picture_url,
         "title": title,
         "description": description,
+        "weather": weather,
         "feeling": feeling,
+        "imageUrl": None,
+        "pictureUrl": picture_url,
     }
     result = get_database().story.insert_one(story)
     if result is None or result.inserted_id != story["_id"]:
