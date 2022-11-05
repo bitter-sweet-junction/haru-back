@@ -48,7 +48,7 @@ def authorize(credential: CredentialResponse):
         upsert=True,
     )
     access_token = create_token(user["_id"])
-    return {"access_token": access_token, "user": _user_to_dto(user)}
+    return {"accessToken": access_token, "user": _user_to_dto(user)}
 
 
 @user_router.get("/user")
