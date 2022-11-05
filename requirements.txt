@@ -1,4 +1,5 @@
 fastapi
+google-cloud-storage
 pyjwt
 pymongo
 python-multipart
