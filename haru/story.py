@@ -42,7 +42,7 @@ def post_stories(
     image_url = None
     if image is not None:
         image_url = upload_to_gcs(
-            bucket="haru-image-store", prefix=user["_id"], name=f"image_{story_id}", content=picture.file.read()
+            bucket="haru-image-store", prefix=user["_id"], name=f"image_{story_id}", content=image.file.read()
         )
 
     story: Story = {
