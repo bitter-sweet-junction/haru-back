@@ -12,6 +12,12 @@ GOOGLE_OAUTH_VERIFY_URL = "https://oauth2.googleapis.com/tokeninfo"
 user_router = APIRouter()
 
 
+def _user_to_dto(user: User) -> dict:
+    u = dict(**user)
+    u["id"] = u.pop("_id")
+    return u
+
+
 @user_router.post("/authorize/google")
 def authorize(credential: CredentialResponse):
     result = requests.get(GOOGLE_OAUTH_VERIFY_URL, params={"id_token": credential.credential})
@@ -42,9 +48,9 @@ def authorize(credential: CredentialResponse):
         upsert=True,
     )
     access_token = create_token(user["_id"])
-    return {"access_token": access_token, "user": user}
+    return {"access_token": access_token, "user": _user_to_dto(user)}
 
 
 @user_router.get("/user")
 def get_user(user: User = Depends(get_current_user)):
-    return {"user": user}
+    return {"user": _user_to_dto(user)}
