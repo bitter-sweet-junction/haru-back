@@ -1,6 +1,8 @@
-from typing import Optional, TypedDict
+from typing import TypedDict
 
 
 class User(TypedDict):
-    _id: Optional[str]
-    name: str
+    _id: str | None
+    google_email: str
+    google_name: str
+    google_picture: str

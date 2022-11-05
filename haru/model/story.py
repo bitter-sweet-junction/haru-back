@@ -1,13 +1,13 @@
-from typing import Literal, Optional, TypedDict
+from typing import Literal, TypedDict
 
 
 class Story(TypedDict):
-    _id: Optional[str]
+    _id: str | None
     name: str
     date: str
     weather: Literal["SUNNY", "RAIN", "CLOUD"]
     createTime: float
-    imageUrl: Optional[str]
+    imageUrl: str | None
     title: str
-    description: Optional[str]
+    description: str | None
     feeling: Literal["HAPPY", "ANGRY", "SAD"]
