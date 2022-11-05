@@ -66,18 +66,18 @@ def post_stories(
     return {"story": _story_to_dto(story)}
 
 
-@story_router.get("/stories/<story_id>")
-def get_story(story_id: int, user: User = Depends(get_current_user)):
-    story: Story = get_database().story.find({"story_id": story_id, "user_id": user["_id"]})
+@story_router.get("/stories/{story_id}")
+def get_story(story_id: str, user: User = Depends(get_current_user)):
+    story: Story = get_database().story.find_one({"_id": story_id, "user_id": user["_id"]})
     if story is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail="story not found")
 
     return {"story": _story_to_dto(story)}
 
 
-@story_router.delete("/stories/<story_id>")
-def delete_story(story_id: int, user: User = Depends(get_current_user)):
-    story: Story = get_database().story.find_one_and_delete({"story_id": story_id, "user_id": user["_id"]})
+@story_router.delete("/stories/{story_id}")
+def delete_story(story_id: str, user: User = Depends(get_current_user)):
+    story: Story = get_database().story.find_one_and_delete({"_id": story_id, "user_id": user["_id"]})
     if story is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail="story not found")
 
