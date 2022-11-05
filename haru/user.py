@@ -1,11 +1,12 @@
-import requests
 import uuid
+
+import requests
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from haru.utils.db import get_database
 from haru.model import User
 from haru.model.form import CredentialResponse
-from haru.utils.auth import get_current_user, create_token
+from haru.utils.auth import create_token, get_current_user
+from haru.utils.db import get_database
 
 GOOGLE_OAUTH_VERIFY_URL = "https://oauth2.googleapis.com/tokeninfo"
 user_router = APIRouter()
@@ -37,8 +38,8 @@ def authorize(credential: CredentialResponse):
     user = get_database().user.find_one_and_update(
         {"google_email": email},
         update={"$setOnInsert": generated_user},
-        return_document=True, # return new document
-        upsert=True
+        return_document=True,  # return new document
+        upsert=True,
     )
     access_token = create_token(user["_id"])
     return {"access_token": access_token, "user": user}
