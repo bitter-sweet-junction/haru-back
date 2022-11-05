@@ -46,4 +46,4 @@ def authorize(credential: CredentialResponse):
 
 @user_router.get("/user")
 def get_user(user: User = Depends(get_current_user)):
-    pass
+    return {"user": user}
