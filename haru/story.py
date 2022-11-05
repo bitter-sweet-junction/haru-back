@@ -32,7 +32,7 @@ def get_story(story_id: int, user: User = Depends(get_current_user)):
     if story is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail="story not found")
 
-    return _story_to_dto(story)
+    return {"story": _story_to_dto(story)}
 
 
 @story_router.delete("/stories/<story_id>")
