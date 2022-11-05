@@ -49,7 +49,7 @@ def post_stories(
         "_id": story_id,
         "user_id": user["_id"],
         "date": date,
-        "createTime": time.time(),
+        "createTime": time.time() * 1000,
         "title": title,
         "description": description,
         "weather": weather,
