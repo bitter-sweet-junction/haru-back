@@ -36,13 +36,13 @@ def post_stories(
     description: str | None = Form(default=None),
     weather: str | None = Form(default=None),
     feeling: str | None = Form(default=None),
-    picture: UploadFile | None = File(default=None),
+    image: UploadFile | None = File(default=None),
 ):
     story_id = uuid.uuid4().hex
-    picture_url = None
-    if picture is not None:
-        picture_url = upload_to_gcs(
-            bucket="haru-image-store", prefix=user["_id"], name=f"picture_{story_id}", content=picture.file.read()
+    image_url = None
+    if image is not None:
+        image_url = upload_to_gcs(
+            bucket="haru-image-store", prefix=user["_id"], name=f"image_{story_id}", content=picture.file.read()
         )
 
     story: Story = {
@@ -54,8 +54,8 @@ def post_stories(
         "description": description,
         "weather": weather,
         "feeling": feeling,
-        "imageUrl": None,
-        "pictureUrl": picture_url,
+        "imageUrl": image_url,
+        "pictureUrl": None,
     }
     result = get_database().story.insert_one(story)
     if result is None or result.inserted_id != story["_id"]:

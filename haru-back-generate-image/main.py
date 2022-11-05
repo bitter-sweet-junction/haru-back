@@ -33,7 +33,7 @@ def entrypoint(event, context):
         "content": description
     }
     result = requests.post(f"{IMAGE_GENERATOR_HOST}/text2img", json=content)
-    image_url = upload_to_gcs(
-        bucket="haru-image-store", prefix=user_id, name=f"image_{story_id}", content=result.content
+    picture_url = upload_to_gcs(
+        bucket="haru-image-store", prefix=user_id, name=f"picture_{story_id}", content=result.content
     )
-    db.story.update_one({"_id": story_id}, {"$set": {"imageUrl": image_url}})
+    db.story.update_one({"_id": story_id}, {"$set": {"pictureUrl": picture_url}})
