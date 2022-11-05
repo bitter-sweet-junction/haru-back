@@ -1,8 +1,8 @@
 import base64
 import json
-import requests
 import os
 
+import requests
 from google.cloud.storage import Client
 from pymongo import MongoClient
 
@@ -28,10 +28,7 @@ def entrypoint(event, context):
     title = data["title"]
     description = data["description"]
 
-    content = {
-        "title": title,
-        "content": description
-    }
+    content = {"title": title, "content": description}
     result = requests.post(f"{IMAGE_GENERATOR_HOST}/text2img", json=content)
     picture_url = upload_to_gcs(
         bucket="haru-image-store", prefix=user_id, name=f"picture_{story_id}", content=result.content
