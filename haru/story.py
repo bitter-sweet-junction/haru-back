@@ -1,7 +1,7 @@
 import time
 import uuid
 
-from fastapi import APIRouter, Depends, File, Form, HTTPException, status
+from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile, status
 from pymongo import ASCENDING
 
 from haru.model import Story, User
@@ -30,14 +30,16 @@ def post_stories(
     user: User = Depends(get_current_user),
     date: str = Form(),
     title: str = Form(),
-    description: str = Form(),
-    feeling: str = Form(),
-    picture: bytes = File(),
+    description: str | None = Form(default=None),
+    feeling: str | None = Form(default=None),
+    picture: UploadFile | None = File(default=None),
 ):
     story_id = uuid.uuid4().hex
     picture_url = None
     if picture is not None:
-        picture_url = upload_to_gcs("haru-image-store", f"picture_{story_id}", prefix=user["_id"])
+        picture_url = upload_to_gcs(
+            bucket="haru-image-store", prefix=user["_id"], name=f"picture_{story_id}", content=picture.file.read()
+        )
 
     story: Story = {
         "_id": story_id,
@@ -50,7 +52,7 @@ def post_stories(
         "description": description,
         "feeling": feeling,
     }
-    result = get_database().story.insert_one({story})
+    result = get_database().story.insert_one(story)
     if result is None or result.inserted_id != story["_id"]:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="story insertion failed")
 
