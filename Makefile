@@ -1,7 +1,7 @@
 .PHONY: style quality test test-cov
 
-check_dirs := package/ scripts/ tests/
-test_dirs := package/
+check_dirs := haru/ scripts/ tests/
+test_dirs := haru/
 
 style:
 	black $(check_dirs)
