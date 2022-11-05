@@ -1,9 +1,13 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+import time
+import uuid
+
+from fastapi import APIRouter, Depends, File, Form, HTTPException, status
 from pymongo import ASCENDING
 
 from haru.model import Story, User
 from haru.utils.auth import get_current_user
 from haru.utils.db import get_database
+from haru.utils.gcp import upload_to_gcs
 
 story_router = APIRouter()
 
@@ -22,8 +26,35 @@ def get_stories(user: User = Depends(get_current_user)):
 
 
 @story_router.post("/stories")
-def post_stories(user: User = Depends(get_current_user)):
-    pass
+def post_stories(
+    user: User = Depends(get_current_user),
+    date: str = Form(),
+    title: str = Form(),
+    description: str = Form(),
+    feeling: str = Form(),
+    picture: bytes = File(),
+):
+    story_id = uuid.uuid4().hex
+    picture_url = None
+    if picture is not None:
+        picture_url = upload_to_gcs("haru-image-store", f"picture_{story_id}", prefix=user["_id"])
+
+    story: Story = {
+        "_id": story_id,
+        "user_id": user["_id"],
+        "date": date,
+        "createTime": time.time(),
+        "imageUrl": None,
+        "pictureUrl": picture_url,
+        "title": title,
+        "description": description,
+        "feeling": feeling,
+    }
+    result = get_database().story.insert_one({story})
+    if result is None or result.inserted_id != story["_id"]:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="story insertion failed")
+
+    return {"story": _story_to_dto(story)}
 
 
 @story_router.get("/stories/<story_id>")

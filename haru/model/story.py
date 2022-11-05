@@ -9,6 +9,7 @@ class Story(TypedDict):
     weather: Literal["SUNNY", "RAIN", "CLOUD"]
     createTime: float
     imageUrl: str | None
+    pictureUrl: str | None
     title: str
     description: str | None
     feeling: Literal["HAPPY", "ANGRY", "SAD"]

@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from haru.story import story_router
 from haru.user import user_router
 from haru.utils.db import init_database
+from haru.utils.gcp import init_gcp_clients
 
 
 def init_middlewares(app: FastAPI):
@@ -27,6 +28,7 @@ def create_app() -> FastAPI:
     init_middlewares(app)
     init_routers(app)
     init_database()
+    init_gcp_clients()
 
     return app
 
