@@ -1,7 +1,11 @@
+import os
+
 from google.cloud import pubsub_v1, storage
 
 _gcs_client: storage.Client = None
 _pubsub_client: pubsub_v1.PublisherClient = None
+
+GCP_PROJECT_ID = os.environ.get("GCP_PROJECT_ID", default="junction-hack22esp-7022")
 
 
 def upload_to_gcs(bucket: str, name: str, content: bytes, *, prefix: str = "") -> str:
@@ -13,7 +17,7 @@ def upload_to_gcs(bucket: str, name: str, content: bytes, *, prefix: str = "") -
 
 
 def publish_pubsub(topic: str, content: str):
-    topic_path = _pubsub_client.topic_path("", topic)
+    topic_path = _pubsub_client.topic_path(GCP_PROJECT_ID, topic)
     result = _pubsub_client.publish(topic_path, content.encode("utf-8"))
     return result.result()
 
