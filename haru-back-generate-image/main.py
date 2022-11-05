@@ -1,6 +1,7 @@
-import os
+import base64
 import json
 import requests
+import os
 
 from google.cloud.storage import Client
 from pymongo import MongoClient
@@ -21,7 +22,7 @@ def upload_to_gcs(bucket: str, name: str, content: bytes, *, prefix: str = "") -
 
 
 def entrypoint(event, context):
-    data = json.loads(event["data"])
+    data = json.loads(base64.b64decode(event["data"]).decode())
     story_id = data["_id"]
     user_id = data["user_id"]
     title = data["title"]
