@@ -1,6 +1,6 @@
 .PHONY: style quality test test-cov
 
-check_dirs := haru/ scripts/ tests/
+check_dirs := haru/ haru-back-generate-image/ scripts/ tests/
 test_dirs := haru/
 
 style:
