@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 
-from haru.utils.auth import get_current_user
 from haru.model import User
+from haru.utils.auth import get_current_user
 
 story_router = APIRouter()
 

@@ -1,4 +1,4 @@
-from typing import Optional, TypedDict, Literal
+from typing import Literal, Optional, TypedDict
 
 
 class Story(TypedDict):

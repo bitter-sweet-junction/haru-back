@@ -1,11 +1,11 @@
 import os
-import jwt
 
+import jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 
-from haru.utils.db import get_database
 from haru.model import User
+from haru.utils.db import get_database
 
 JWT_TOKEN = os.environ.get("HARU_JWT_TOKEN")
 oauth2 = OAuth2PasswordBearer(tokenUrl="/authorize/google")
@@ -21,7 +21,7 @@ def get_current_user(token: str = Depends(oauth2)) -> User:
         result = jwt.decode(token, JWT_TOKEN, algorithms="HS256")
         user_id = result.get("user_id")
         user = get_database().user.find_one({"_id": user_id})
-    except:
+    except Exception:
         pass
 
     if user is None:
@@ -30,5 +30,5 @@ def get_current_user(token: str = Depends(oauth2)) -> User:
             detail="Auth failed",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    
+
     return user
