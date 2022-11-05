@@ -30,6 +30,9 @@ def entrypoint(event, context):
 
     content = {"title": title, "content": description}
     result = requests.post(f"{IMAGE_GENERATOR_HOST}/text2img", json=content)
+    if result.status_code != 200:
+        raise RuntimeError("Failed to generate image")
+
     picture_url = upload_to_gcs(
         bucket="haru-image-store", prefix=user_id, name=f"picture_{story_id}", content=result.content
     )
