@@ -6,7 +6,7 @@ then
   exit 1
 fi
 
-IMAGE_NAME=us.gcr.io/junction-hack22esp-7022/haru-back:$1
+IMAGE_NAME=gcr.io/haru-today/haru-back:$1
 
 # build
 docker build . -t $IMAGE_NAME
@@ -19,7 +19,7 @@ gcloud run deploy haru-back \
     --image=$IMAGE_NAME \
     --allow-unauthenticated \
     --port=80 \
-    --service-account=haru-backend@junction-hack22esp-7022.iam.gserviceaccount.com \
+    --service-account=haru-backend@haru-today.iam.gserviceaccount.com \
     --set-env-vars=$(cat .env | tr "\n" ",") \
-    --region=us-central1 \
-    --project=junction-hack22esp-7022
+    --region=asia-northeast3 \
+    --project=haru-today
