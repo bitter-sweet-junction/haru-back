@@ -5,7 +5,7 @@ from google.cloud import pubsub_v1, storage
 _gcs_client: storage.Client = None
 _pubsub_client: pubsub_v1.PublisherClient = None
 
-GCP_PROJECT_ID = os.environ.get("GCP_PROJECT_ID", default="junction-hack22esp-7022")
+GCP_PROJECT_ID = os.environ.get("GCP_PROJECT_ID", default="haru-today")
 
 
 def upload_to_gcs(bucket: str, name: str, content: bytes, *, prefix: str = "") -> str:
