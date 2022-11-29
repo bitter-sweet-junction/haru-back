@@ -23,8 +23,8 @@ def upload_to_gcs(bucket: str, name: str, content: bytes, *, prefix: str = "") -
 
 def inference(title: str, content: str) -> bytes:
     prompt = f"A Cosy image of {title}. highly detailed, art by Makoto Shinkai, Trending on artstation"
-    inf = StabilityInference(key=STABILITY_KEY, engine="stable-diffusion-768-v2-0")
-    answers = inf.generate(prompt=prompt, height=768, width=768)
+    inf = StabilityInference(key=STABILITY_KEY, engine="stable-diffusion-512-v2-0")
+    answers = inf.generate(prompt=prompt, height=512, width=512)
     for resp in list(answers):
         for artifact in resp.artifacts:
             if artifact.type == 1:  # generation.ARTIFACT_IMAGE
