@@ -26,7 +26,7 @@ def inference(title: str, content: str) -> bytes:
     answers = StabilityInference(key=STABILITY_KEY).generate(prompt=prompt)
     for resp in list(answers):
         for artifact in resp.artifacts:
-            if artifact.type == 1: # generation.ARTIFACT_IMAGE
+            if artifact.type == 1:  # generation.ARTIFACT_IMAGE
                 return artifact.binary
 
     return b""
@@ -40,7 +40,5 @@ def entrypoint(event, context):
     description = data["description"]
 
     content = inference(title=title, content=description)
-    picture_url = upload_to_gcs(
-        bucket="haru-image-store", prefix=user_id, name=f"picture_{story_id}", content=content
-    )
+    picture_url = upload_to_gcs(bucket="haru-image-store", prefix=user_id, name=f"picture_{story_id}", content=content)
     db.story.update_one({"_id": story_id}, {"$set": {"pictureUrl": picture_url}})
