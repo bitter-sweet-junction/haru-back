@@ -40,5 +40,5 @@ def entrypoint(event, context):
     description = data["description"]
 
     content = inference(title=title, content=description)
-    picture_url = upload_to_gcs(bucket="haru-image-store", prefix=user_id, name=f"picture_{story_id}", content=content)
+    picture_url = upload_to_gcs(bucket="haru-today-image", prefix=user_id, name=f"picture_{story_id}", content=content)
     db.story.update_one({"_id": story_id}, {"$set": {"pictureUrl": picture_url}})
